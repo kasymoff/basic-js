@@ -1,3 +1,5 @@
+// Done
+
 const { NotImplementedError } = require('../extensions/index.js');
 
 /**
@@ -23,10 +25,63 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+  let returnArr = matrix.slice();
+  returnArr.unshift(new Array(matrix[0].length).fill(false));
+  returnArr.push(new Array(matrix[0].length).fill(false));
+  for (let i = 0; i < returnArr.length; i++) {
+    returnArr[i].unshift(false);
+    returnArr[i].push(false);
+  };
+  for (let i = 0; i < returnArr.length; i++) {
+    for (let j = 0; j < returnArr[i].length; j++) {
+      if (returnArr[i][j] === false) {
+        returnArr[i][j] = 0;
+      } else {
+        returnArr[i][j] = 'mine';
+      }
+    }
+  }
+  for (let i = 0; i < returnArr.length; i++) {
+    for (let j = 0; j < returnArr[i].length; j++) {
+      if (returnArr[i][j] === 'mine') {
+        if (typeof returnArr[i - 1][j - 1] === 'number') returnArr[i - 1][j - 1]++;
+        if (typeof returnArr[i - 1][j] === 'number') returnArr[i - 1][j]++;
+        if (typeof returnArr[i - 1][j + 1] === 'number') returnArr[i - 1][j + 1]++;
+        if (typeof returnArr[i][j - 1] === 'number') returnArr[i][j - 1]++;
+        if (typeof returnArr[i][j + 1] === 'number') returnArr[i][j + 1]++;
+        if (typeof returnArr[i + 1][j - 1] === 'number') returnArr[i + 1][j - 1]++;
+        if (typeof returnArr[i + 1][j] === 'number') returnArr[i + 1][j]++;
+        if (typeof returnArr[i + 1][j + 1] === 'number') returnArr[i + 1][j + 1]++;
+      }
+    }
+  }
+  returnArr.shift();
+  returnArr.pop();
+  for(let i = 0; i < returnArr.length; i++) {
+    returnArr[i].shift();
+    returnArr[i].pop();
+  }
+  for (let i = 0; i < returnArr.length; i++) {
+    for (let j = 0; j < returnArr[i].length; j++) {
+      if (returnArr[i][j] === 'mine') {
+        returnArr[i][j] = 1;
+      }
+    }
+  }
+  return returnArr;
 }
+
+minesweeper([
+  [true, false, false],
+  [false, true, false],
+  [false, false, false],
+])
+
+minesweeper([
+  [false, false, false],
+  [false, false, false],
+])
 
 module.exports = {
   minesweeper
