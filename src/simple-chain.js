@@ -5,6 +5,7 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 const chainMaker = {
+  
   chain: [],
 
   getLength() {
@@ -12,38 +13,41 @@ const chainMaker = {
   },
 
   addLink(value = "") {
-    this.chain.push(`( ${value} )`);
-    console.log(this.chain)
+    this.chain.push(`( ${(value)} )`);
     return this;
   },
 
   removeLink(position) {
-    if (typeof position !== 'number') {
-      if (position % 1 != 0 || position > this.chain.length || position < 1) {
+    if (typeof position === 'number' && position % 1 === 0) {
+      if (position < 1 || position > this.chain.length) {
+        this.chain = [];
         throw new Error("You can't remove incorrect link!");
       }
+      this.chain.splice(position - 1, 1);
+      return this;
     }
-    this.chain.splice(position - 1, 1);
-    console.log(this.chain);
-    return this;
+    this.chain = [];
+    throw new Error("You can't remove incorrect link!");
   },
 
   reverseChain() {
     this.chain.reverse();
-    console.log(this.chain);
     return this;
   },
 
   finishChain() {
-    console.log(this.chain);
-    const finishedChain = this.chain.join("~~");
+    finishedChain = this.chain.join("~~");
     this.chain = [];
-    console.log(finishedChain);
     return finishedChain;
   }
+
 };
 
-const exampleChain = chainMaker.addLink().removeLink(3)
+
+const exampleChain = chainMaker.addLink('GHI').addLink(null).reverseChain().addLink(333).reverseChain().reverseChain().addLink(0).reverseChain().reverseChain().addLink('GHI').finishChain();
+console.log(exampleChain);
+const exampleChain2 = chainMaker.addLink(1).addLink(2).addLink(3).removeLink(2).finishChain();
+console.log(exampleChain2);
 
 module.exports = {
   chainMaker
